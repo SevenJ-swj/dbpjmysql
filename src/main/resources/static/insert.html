@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+
+    <title>Scholar Graph </title>
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- global stylesheets -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/font-icon-style.css">
+    <link rel="stylesheet" href="css/tagsinput.css">
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
+    <style type="text/css">
+        /*选项卡*/
+        a:hover, a:focus {
+            outline: none;
+            text-decoration: none;
+        }
+
+        .tab .nav-tabs {
+            padding-left: 15px;
+            border-bottom: 4px solid #692f6c;
+        }
+
+        .tab .nav-tabs li a {
+            color: #fff;
+            padding: 10px 20px;
+            margin-right: 10px;
+            background: #692f6c;
+            text-shadow: 1px 1px 2px #000;
+            border: none;
+            border-radius: 0;
+            opacity: 0.5;
+            position: relative;
+            transition: all 0.3s ease 0s;
+        }
+
+        .tab .nav-tabs li a:hover {
+            background: #692f6c;
+            opacity: 0.8;
+        }
+
+        .tab .nav-tabs li.active a {
+            opacity: 1;
+        }
+
+        .tab .nav-tabs li.active a,
+        .tab .nav-tabs li.active a:hover,
+        .tab .nav-tabs li.active a:focus {
+            color: #fff;
+            background: #692f6c;
+            border: none;
+            border-radius: 0;
+        }
+
+        .tab .nav-tabs li a:before,
+        .tab .nav-tabs li a:after {
+            content: "";
+            border-top: 42px solid transparent;
+            position: absolute;
+            top: -2px;
+        }
+
+        .tab .nav-tabs li a:before {
+            border-right: 15px solid #692f6c;
+            left: -15px;
+        }
+
+        .tab .nav-tabs li a:after {
+            border-left: 15px solid #692f6c;
+            right: -15px;
+        }
+
+        .tab .nav-tabs li a i,
+        .tab .nav-tabs li.active a i {
+            display: inline-block;
+            padding-right: 5px;
+            font-size: 15px;
+            text-shadow: none;
+        }
+
+        .tab .nav-tabs li a span {
+            display: inline-block;
+            font-size: 14px;
+            letter-spacing: -9px;
+            opacity: 0;
+            transition: all 0.3s ease 0s;
+        }
+
+        .tab .nav-tabs li a:hover span,
+        .tab .nav-tabs li.active a span {
+            letter-spacing: 1px;
+            opacity: 1;
+            transition: all 0.3s ease 0s;
+        }
+
+        .tab .tab-content {
+            padding: 30px;
+            background: #fff;
+            font-size: 16px;
+            color: #6c6c6c;
+            line-height: 25px;
+        }
+
+        .tab .tab-content h3 {
+            font-size: 24px;
+            margin-top: 0;
+        }
+
+        @media only screen and (max-width: 479px) {
+            .tab .nav-tabs li {
+                width: 100%;
+                margin-bottom: 5px;
+                text-align: center;
+            }
+
+            .tab .nav-tabs li a span {
+                letter-spacing: 1px;
+                opacity: 1;
+            }
+        }
+
+        /*表单*/
+        .insert-wrap {
+            padding: 1.5em 0;
+        }
+
+        .custom-input {
+            position: relative;
+            padding-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .custom-input input {
+            padding-left: 15px;
+        }
+
+        .btn {
+            width: 80px;
+            top: 50px;
+            margin: auto;
+            outline: none;
+        }
+
+        .btn:hover {
+            width: 20%;
+        }
+
+        .result {
+            display: none;
+            width: 100%;
+            margin-top: 60px;
+            text-align: center;
+            color: white;
+            padding: 30px;
+            background-color: #999d9c;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!--====================================================
+                         MAIN NAVBAR
+======================================================-->
+<header class="header">
+    <nav class="navbar navbar-expand-lg ">
+        <div class="container-fluid ">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+                <div class="navbar-header">
+                    <a href="index.html" class="navbar-brand">
+                        <div class="brand-text brand-big hidden-lg-down"><img src="img/logo-white.png" alt="Logo"
+                                                                              class="logo-white"></div>
+                        <div class="brand-text brand-small"><img src="img/logo-icon.png" alt="Logo" class="img-fluid">
+                        </div>
+                    </a>
+                    <a id="toggle-btn" href="#" class="menu-btn active">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </a>
+                </div>
+            </div>
+            <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+                <!-- Expand-->
+                <li class="nav-item d-flex align-items-center full_scr_exp"><a class="nav-link" href="#"><img
+                        src="img/expand.png" onclick="toggleFullScreen(document.body)" class="img-fluid" alt=""></a>
+                </li>
+                <li class="nav-item dropdown"><a id="profile" class="nav-link logout" data-target="#" href="#"
+                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
+                        src="img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"
+                        style="height: 30px; width: 30px;"></a>
+                    <ul aria-labelledby="profile" class="dropdown-menu profile">
+                        <li>
+                            <a rel="nofollow" href="login.html" class="dropdown-item">
+                                <div class="notification">
+                                    <div class="notification-content"><i class="fa fa-power-off"></i>Logout</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<!--====================================================
+                        PAGE CONTENT
+======================================================-->
+<div class="page-content d-flex align-items-stretch">
+
+    <!--***** SIDE NAVBAR *****-->
+    <nav class="side-navbar">
+        <div class="sidebar-header d-flex align-items-center">
+            <div class="avatar"><img src="img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div>
+            <div class="title">
+                <h1 class="h4">Team 10</h1>
+            </div>
+        </div>
+        <hr>
+        <!-- Sidebar Navidation Menus-->
+        <ul class="list-unstyled">
+            <li><a href="index.html"><i class="icon-home"></i>home</a></li>
+            <li><a href="#apps" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>查询
+            </a>
+                <ul id="apps" class="collapse list-unstyled">
+                    <li><a href="query_MySQL.html">MySQL</a></li>
+                    <li><a href="query_Neo4j.html">Neo4j</a></li>
+                    <li><a href="comparision.html">性能对比</a></li>
+                </ul>
+            </li>
+            <li class="active"><a href="insert.html"> <i class="fa fa-bar-chart"></i>插入 </a></li>
+            <li><a href="delete.html"> <i class="fa fa-map-o"></i>删除 </a></li>
+    </nav>
+
+    <div class="content-inner chart-cont">
+
+        <div class="content-inner">
+            <div class="insert-class">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-offset-1 col-lg-12">
+                            <div class="tab" role="tabpanel">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#Section1" aria-controls="star"
+                                                                              role="tab" data-toggle="tab"><i
+                                            class="fa fa-star"></i><span>作者</span></a></li>
+                                    <li role="presentation"><a href="#Section2" aria-controls="star" role="tab"
+                                                               data-toggle="tab"><i
+                                            class="fa fa-star"></i><span>论文</span></a></li>
+                                    <li role="presentation"><a href="#Section3" aria-controls="star" role="tab"
+                                                               data-toggle="tab"><i
+                                            class="fa fa-star"></i><span>会议</span></a></li>
+                                </ul>
+                                <!-- Tab panes -->
+                                <div class="tab-content tabs">
+                                    <div role="tabpanel" class="tab-pane fade in active" id="Section1">
+                                        <h3>作者</h3>
+                                        <div class="insert-wrap author-insert">
+                                            <div class="row">
+                                                <div class="custom-input  col-lg-6">
+                                                    <label for="author-name">作者名：</label>
+                                                    <input type="text" class="form-control" id="author-name"
+                                                           placeholder="请输入会议名">
+                                                </div>
+
+                                                <div class="custom-input  col-lg-6">
+                                                    <label for="author-url">作者url：</label>
+                                                    <input type="text" class="form-control" id="author-url"
+                                                           placeholder="请输入作者主页url">
+                                                </div>
+
+                                                <button class="btn btn-primary rippler rippler-default"
+                                                        id="author-insert-btn">插入
+                                                </button>
+
+                                                <div class="result" id="author-insert-result">
+                                                    <p class="SQL">MySQL用时：</p>
+                                                    <p class="Neo4j">Neo4j用时：</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="Section2">
+                                        <h3>论文</h3>
+                                        <div class="insert-wrap paper-insert">
+                                            <div class="row">
+                                                <div class="custom-input  col-lg-6">
+                                                    <label for="author-name">作者名：</label>
+                                                    <input type="text" class="form-control" id="author-name"
+                                                           placeholder="请输入作者名">
+                                                </div>
+
+                                                <div class="custom-input  col-lg-6">
+                                                    <label for="author-url">作者url：</label>
+                                                    <input type="text" class="form-control" id="author-url"
+                                                           placeholder="请输入作者主页url">
+                                                </div>
+
+                                                <div class="custom-input col-lg-6">
+                                                    <label>论文：</label>
+                                                    <input type="text" class="form-control" id="paper-title"
+                                                           placeholder="请输入论文标题">
+                                                </div>
+
+                                                <div class="custom-input  col-lg-6">
+                                                    <label for="conference">会议：</label>
+                                                    <input type="text" class="form-control" id="conference"
+                                                           placeholder="请输入会议名">
+                                                </div>
+
+                                                <div class="custom-input col-lg-6">
+                                                    <label>年份：</label>
+                                                    <input type="text" class="form-control" id="publish-year"
+                                                           placeholder="请输入论文年份">
+                                                </div>
+
+                                                <div class="custom-input col-lg-6">
+                                                    <label>引用次数：</label>
+                                                    <input type="text" class="form-control" id="citation-time"
+                                                           placeholder="请输入引用次数">
+                                                </div>
+
+                                                <div class="custom-input col-lg-12">
+                                                    <label>单位：</label>
+                                                    <input type="text" value="" data-role="tagsinput"
+                                                           class="form-control" id="department" placeholder="请输入单位名">
+                                                </div>
+
+                                                <div class="custom-input col-lg-12">
+                                                    <label for="field">领域：</label>
+                                                    <input type="text" value="" data-role="tagsinput"
+                                                           class="form-control" id="field" placeholder="请输入领域">
+                                                </div>
+
+                                                <button class="btn btn-primary rippler rippler-default"
+                                                        id="paper-insert-btn">插入
+                                                </button>
+
+                                                <div class="result" id="paper-insert-result">
+                                                    <p class="SQL">MySQL用时：</p>
+                                                    <p class="Neo4j">Neo4j用时：</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="Section3">
+                                        <h3>会议</h3>
+                                        <div class="insert-wrap conference-insert">
+                                            <div class="row">
+                                                <div class="custom-input  col-lg-6">
+                                                    <label for="conference">会议名：</label>
+                                                    <input type="text" class="form-control" id="conference"
+                                                           placeholder="请输入会议名">
+                                                </div>
+
+                                                <button class="btn btn-primary rippler rippler-default"
+                                                        id="conference-insert-btn">插入
+                                                </button>
+
+                                                <div class="result" id="conference-insert-result">
+                                                    <p class="SQL">MySQL用时：</p>
+                                                    <p class="Neo4j">Neo4j用时：</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 结果展示 -->
+            <!-- <div class="insert-result">
+                <table border="1">
+                    <tr>
+                        <th></th>
+                        <th>mySQL</th>
+                        <th>Neo4j</th>
+                    </tr>
+                    <tr>
+                        <td>time</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<!--Global Javascript -->
+<script src="js/index.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/popper/popper.min.js"></script>
+<script src="js/tether.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/jquery.validate.min.js"></script>
+<script src="js/front.js"></script>
+<script src="js/tagsinput.min.js"></script>
+
+<!--Core Javascript -->
+<script src="js/echarts.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // 插入作者
+        $('#author-insert-btn').click(function () {
+            var authorName = $('.author-insert #author-name').val();
+            var authorURL = $('.author-insert #author-url').val();
+            $('#author-insert-result').show();
+
+            $.ajax({
+                type: 'POST',
+                url: mysql_host + '/SQL/author/insert',
+                data: {
+                    type: 1,
+                    authorName: authorName,
+                    authorURL: authorURL
+                },
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (res) {
+                    // if(res.code == 0){
+                        // 渲染SQL返回结果
+                        $('#author-insert-result .SQL').text('MySQL用时：' + res.data.time + 'ms');
+                    // } else{
+                    //     alert('insert fail')
+                    // }
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: neo4j_host + '/neo4j/author/insert',
+                data: {
+                    type: 1,
+                    authorName: authorName,
+                    authorURL: authorURL
+                },
+                dataType: 'json',
+                success: function (res) {
+                    if(res.code == 0){
+                        // 渲染Neo4j返回结果
+                        $('#author-insert-result .Neo4j').text('Neo4j用时：' + res.data.time + 'ms');
+                    } else{
+                        alert('insert fail')
+
+                    }
+                }
+            });
+        });
+
+        // 插入论文
+        $('#paper-insert-btn').click(function () {
+            var authorName = $('.paper-insert #author-name').val();
+            var authorURL = $('.paper-insert #author-url').val();
+            var paperTitle = $('.paper-insert #paper-title').val();
+            var conference = $('.paper-insert #conference').val();
+            var publishYear = $('.paper-insert #publish-year').val();
+            var citationTime = $('.paper-insert #citation-time').val();
+            var department = $('.paper-insert #department').val();
+            var field = $('.paper-insert #field').val();
+            $('#paper-insert-result').show();
+
+            $.ajax({
+                type: 'POST',
+                url: mysql_host + '/SQL/paper/insert',
+                data: {
+                    type: 2,
+                    authorName: authorName,
+                    authorURL: authorURL,
+                    paperTitle: paperTitle,
+                    conference: conference,
+                    publishYear: publishYear,
+                    citationTime: citationTime,
+                    department: department,
+                    field: field
+                },
+                dataType: 'json',
+                success: function (res) {
+                    // if(res.code == 0){
+                        // 渲染SQL返回结果
+                        $('#paper-insert-result .SQL').text('MySQL用时：' + res.data.time + 'ms');
+                    // } else{
+
+                    // }
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: neo4j_host + '/neo4j/paper/insert',
+                data: {
+                    type: 2,
+                    authorName: authorName,
+                    authorURL: authorURL,
+                    paperTitle: paperTitle,
+                    conference: conference,
+                    publishYear: publishYear,
+                    citationTime: citationTime,
+                    department: department,
+                    field: field
+                },
+                
+                dataType: 'json',
+                success: function (res) {
+                    if(res.code == 0){
+                        // 渲染Neo4j返回结果
+                        $('#paper-insert-result .Neo4j').text('Neo4j用时：' + res.data.time + 'ms');
+                    } else{
+                        alert('insert fail')
+                    }
+                }
+            });
+        });
+
+        // 插入会议
+        $('#conference-insert-btn').click(function () {
+            var conference = $('.conference-insert #conference').val();
+            $('#conference-insert-result').show();
+
+            $.ajax({
+                type: 'POST',
+                url: mysql_host + '/SQL/conference/insert',
+                data: {
+                    type: 3,
+                    conference: conference
+                },
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (res) {
+                    // if(res.code == 0){
+                        // 渲染sql返回结果
+                        $('#conference-insert-result .SQL').text('MySQL用时：' + res.data.time + 'ms');
+                    // } else{
+
+                    // }
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: neo4j_host + '/neo4j/conference/insert',
+                data: {
+                    type: 3,
+                    conference: conference
+                },
+                dataType: 'json',
+                success: function (res) {
+                    if(res.code == 0){
+                        // 渲染Neo4j返回结果
+                        $('#conference-insert-result .Neo4j').text('Neo4j用时：' + res.data.time + 'ms');
+                    } else{
+                        alert('insert fail')
+                    }
+                }
+            })
+        })
+    })
+</script>
+
+</body>
+
+</html>

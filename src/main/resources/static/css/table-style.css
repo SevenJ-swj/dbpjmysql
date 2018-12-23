@@ -1,0 +1,33 @@
+table {
+    position: relative;
+    top: 150px;
+    width: 80%;
+    color: #333;
+    display: none;
+    word-wrap:break-word;
+    word-break:break-all;
+}
+table th,
+table td {
+    border: 1px solid #cad9ea;
+    height: 30px;
+    padding: 10px;
+}
+table th {
+    background-color: #6a6da9;
+    color: white;
+}
+
+table td
+{
+    min-width: 100px;
+}
+
+/*table tr:nth-child(odd)
+{
+    background: #fff;
+}
+table tr:nth-child(even)
+{
+    background: #F5FAFA;
+}*/
