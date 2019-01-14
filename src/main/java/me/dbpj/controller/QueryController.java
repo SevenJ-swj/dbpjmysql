@@ -32,7 +32,10 @@ public class QueryController {
             @RequestParam("queryTime")String queryTime,
             @RequestParam("showTime")String showTime
                                 ){
+        if(showTime==""||showTime==null) showTime="1";
+        if(queryTime==""||queryTime==null) queryTime="1";
         Long time1=System.currentTimeMillis();
+        for(long i=0l;i<Long.valueOf(queryTime);i++) mysqlService.findPaperByTwoAuthorInOneField(author1,author2);
         List<Paper> papers= mysqlService.findPaperByTwoAuthorInOneField(author1,author2);
         System.out.println(papers.size());
         Long time2=System.currentTimeMillis();
@@ -66,8 +69,12 @@ public class QueryController {
             @RequestParam("showTime")String showTime
     ){
         Long time1=System.currentTimeMillis();
+        if(showTime==""||showTime==null) showTime="1";
+        if(queryTime==""||queryTime==null) queryTime="1";
+        for(long i=0l;i<Long.valueOf(queryTime);i++) mysqlService.findAuthorByCoNum(author1,Integer.valueOf(showTime));
         List<Author> authors= mysqlService.findAuthorByCoNum(author1,Integer.valueOf(showTime));
         Long time2=System.currentTimeMillis();
+
         Long time=(time2-time1);
         Map<String,Object> ans=new TreeMap<>();
         List<Map<String,String>> ls=new ArrayList<>();
@@ -75,7 +82,7 @@ public class QueryController {
         for(Author author:authors)
         {
             Map<String,String> mp=new TreeMap<>();
-            mp.put("name",author.getAuthorName());
+            mp.put("author",author.getAuthorName());
             ans.put((index++).toString(),mp);
             ls.add(mp);
         }
@@ -84,6 +91,7 @@ public class QueryController {
         System.out.println(ResultVOUtil.success(ans,String.valueOf(time)).toString());
         return ResultVOUtil.success(ans,String.valueOf(time));
     }
+    @CrossOrigin
     @PostMapping("/author/insert")
     private ResultVO saveAuthor(
             @RequestParam("type")String type,
@@ -101,6 +109,7 @@ public class QueryController {
         //ans.put("SQLTime",time);
         return ResultVOUtil.success(ans,String.valueOf(time));
     }
+    @CrossOrigin
     @PostMapping("/author/delete")
     private ResultVO delAuthor(
             @RequestParam("type")String type,
@@ -118,7 +127,7 @@ public class QueryController {
         //ans.put("SQLTime",time);
         return ResultVOUtil.success(ans,String.valueOf(time));
     }
-
+    @CrossOrigin
     @PostMapping("/conference/insert")
     private ResultVO saveConference(
             @RequestParam("type")String type,
@@ -134,6 +143,7 @@ public class QueryController {
         ans.put("SQLTime",time);
         return ResultVOUtil.success(ans);
     }
+    @CrossOrigin
     @PostMapping("/conference/delete")
     private ResultVO deleteConference(
             @RequestParam("type")String type,
@@ -150,7 +160,7 @@ public class QueryController {
         //ans.put("SQLTime",time);
         return ResultVOUtil.success(ans,String.valueOf(time));
     }
-
+    @CrossOrigin
     @PostMapping("/paper/insert")
     private ResultVO savePaper(
             @RequestParam("type")String type,
@@ -178,7 +188,7 @@ public class QueryController {
         //ans.put("SQLTime",time);
         return ResultVOUtil.success(ans,String.valueOf(time));
     }
-
+    @CrossOrigin
     @PostMapping("/paper/delete")
     private ResultVO delPaper(@RequestParam("type")String type,
                               @RequestParam("authorName")String authorName,
@@ -214,6 +224,8 @@ public class QueryController {
                                 @RequestParam("paperTitle")String paperTitle,
                                 @RequestParam("queryTime")String queryTime
                                 ){
+        if(showTime==""||showTime==null) showTime="1";
+        if(queryTime==""||queryTime==null) queryTime="1";
         System.out.println("paper query");
         Conference cf = mysqlService.findConferenceByName(conferenceN);
         Paper paper=new Paper();
@@ -223,6 +235,7 @@ public class QueryController {
         paper.setPYear(Integer.valueOf(publishYear));
         Map<String,Object> ans=new TreeMap<>();
         Long time1=System.currentTimeMillis();
+        for(long i=0;i<Long.valueOf(queryTime);i++) mysqlService.findPaper(paper);
         List<Paper> papers=mysqlService.findPaper(paper);
         System.out.println(papers.size());
         Long time2=System.currentTimeMillis();
@@ -247,7 +260,7 @@ public class QueryController {
         System.out.println(ResultVOUtil.success(ans).toString());
         return ResultVOUtil.success(ans,String.valueOf(time));
     }
-
+    @CrossOrigin
     @PostMapping("/author/simple-query")
     private ResultVO queryAuthor(
             @RequestParam("type")String type,
@@ -260,10 +273,13 @@ public class QueryController {
             @RequestParam("queryTime")String queryTime
 
     ){
+        if(showTime==""||showTime==null) showTime="1";
+        if(queryTime==""||queryTime==null) queryTime="1";
         Author author=new Author();
         author.setAuthorName(authorN);
         Map<String,Object> ans=new TreeMap<>();
         Long time1=System.currentTimeMillis();
+        for(long i=0;i<Long.valueOf(queryTime);i++) mysqlService.findAuthor(author);
         List<Author> authors=mysqlService.findAuthor(author);
         Long time2=System.currentTimeMillis();
         Long time=(time2-time1);

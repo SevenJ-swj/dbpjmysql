@@ -30,23 +30,23 @@ public class TimeTest {
     @Test
     public void runInsertAndDel() {
         //limit为查询次数范围
-        Integer limit=1000000;
+        Integer limit=10000;
         FileWriter writerInsert;
         FileWriter writerDelete;
         try {
             writerInsert = new FileWriter("mysqlInsertTime.csv");
             writerDelete = new FileWriter("mysqlDeleteTime.csv");
             StringBuilder fisrtline=new StringBuilder(" ");
-            for(Integer insertNum=1;insertNum<=limit;insertNum*=10) fisrtline.append(","+insertNum.toString());
+            for(Integer insertNum=limit;insertNum<=limit;insertNum*=10) fisrtline.append(","+insertNum.toString());
             writerInsert.write(fisrtline.toString()+"\n");
             writerDelete.write(fisrtline.toString()+"\n");
             //测试次数cnt
-            for(Integer cnt=0;cnt<10;cnt++) {
+            for(Integer cnt=0;cnt<2;cnt++) {
                 StringBuilder sbInsert = new StringBuilder();
                 StringBuilder sbDelete = new StringBuilder();
                 sbInsert.append(cnt.toString());
                 sbDelete.append(cnt.toString());
-                for(int insertNum=1;insertNum<=limit;insertNum*=10) {
+                for(int insertNum=limit;insertNum<=limit;insertNum*=10) {
                     List<Paper> papers=new ArrayList<>();
                     Long t1 = System.currentTimeMillis();
                     for (Integer id = 0; id < insertNum; id++) {

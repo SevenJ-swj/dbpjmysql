@@ -539,6 +539,7 @@
 
 <script>
     mysql_host="http://127.0.0.1:8080";
+    //neo4j_host='?';
     $(document).ready(function () {
         // 论文简单查询
         $('#paper-query-btn').click(function () {
@@ -773,6 +774,7 @@
                     $('.search-result').show()
                     $('#author-cooperation-result .SQL').text('MySQL用时：' + res.time + 'ms');
                     $.each(res.data, function (index, item) {
+                        $("table").show();
                         var tr = '';
                         tr += '<td>' + item.paperTitle + '</td>';
                         tr += '<td>' + item.field + '</td>';
